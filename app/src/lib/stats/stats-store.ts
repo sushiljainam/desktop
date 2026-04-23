@@ -42,6 +42,7 @@ import { getRendererGUID } from '../get-renderer-guid'
 import { ValidNotificationPullRequestReviewState } from '../valid-notification-pull-request-review'
 import { useExternalCredentialHelperKey } from '../trampoline/use-external-credential-helper'
 import { getUserAgent } from '../http'
+import { getHooksEnvEnabled } from '../hooks/config'
 
 type PullRequestReviewStatFieldInfix =
   | 'Approved'
@@ -242,6 +243,11 @@ const DefaultDailyMeasures: IDailyMeasures = {
   previewedPullRequestCount: 0,
   typedInChangesFilterCount: 0,
   appliesIncludedInCommitFilterCount: 0,
+  appliesExcludedFromCommitFilterCount: 0,
+  appliesNewFilesChangesFilterCount: 0,
+  appliesModifiedFilesChangesFilterCount: 0,
+  appliesDeletedFilesChangesFilterCount: 0,
+  appliesClearAllChangesListFilterCount: 0,
   adjustedFiltersForHiddenChangesCount: 0,
   enterpriseAccountCount: 0,
   generateCommitMessageButtonClickCount: 0,
@@ -423,6 +429,9 @@ interface ICalculatedStats {
    * Whether or not the user has the filtering changes enabled
    **/
   readonly filteringChangesEnabled: boolean
+
+  /** Whether or not the user has the git hooks environment enabled */
+  readonly gitHooksEnvEnabled: boolean
 }
 
 type DailyStats = ICalculatedStats &
@@ -641,6 +650,7 @@ export class StatsStore implements IStatsStore {
       diffCheckMarksVisible,
       useExternalCredentialHelper,
       filteringChangesEnabled,
+      gitHooksEnvEnabled: getHooksEnvEnabled(),
     }
   }
 
